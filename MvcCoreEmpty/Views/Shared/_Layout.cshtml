@@ -26,6 +26,11 @@
 
     <!-- Custom styles for this template -->
     <link href="sticky-footer-navbar.css" rel="stylesheet">
+    @*
+        CREAMOS UNA SECCION PARA QUE LAS VISTAS PUEDAN INCLUIR SUS <style> SI LO NECESITAN
+    *@
+    @RenderSection("styles", false)
+    <meta name="theme-color" content="#712cf9">
 </head>
 <body class="d-flex flex-column h-100">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -94,10 +99,16 @@
                             <a class="nav-link active" aria-current="page" href="#">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+                            <a class="nav-link active" asp-controller="Home" asp-action="Index">Casita</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                            @Html.ActionLink("Home", "Index", "Home")
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Sections", "EjemploSection", "Home")
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Persona", "VistaPersona", "Home")
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
@@ -112,7 +123,18 @@
     <!-- Begin page content -->
     <main class="flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5">Sticky footer with fixed navbar</h1>
+            <h1 class="mt-5" id="mensaje">Zona de Vistas</h1>
+            @if(IsSectionDefined("imagenhome")){
+                //ALGUNA VISTA QUIERE SUSTITUIR LA IMAGEN DE HOME
+                @RenderSection("imagenhome", false)
+
+            }else{
+                //CODIGO ESTATICO PARA EL RESTO DE VISTAS QUE NO QUEIREN SUSTITUIR
+                <img src="~/images/florRoja.jpg" style="width:150px; height:150px" />
+            }
+            @RenderSection("images", false)
+           
+            <button class="btn btn-danger" id="botonlayout">Boton Layout</button>
             @RenderBody()
         </div>
     </main>
@@ -124,6 +146,13 @@
     </footer>
     <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/jquery-3.7.1.min.js"></script>
-
+    @RenderSection("scripts", false)
+    <script>
+        $(document).ready(function(){
+            $("#botonlayout").click(function(){
+                $("#mensaje").text("Boton pulsado en LAYOUT!!!");
+            })
+        })
+    </script>
 </body>
 </html>
